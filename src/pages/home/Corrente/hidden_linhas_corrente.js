@@ -35,7 +35,8 @@ export function hiden_linhas_corrente_pos_for(response, i, Vetor_corrente, escon
 
     
     else {
-        var vetor_junt_corrente = [data_horas_mimuto[i], corrente1[i]]
+        
+        var vetor_junt_corrente = [['', 'Corrente'], ['', 0]]
         Vetor_corrente.push(vetor_junt_corrente)
     }
 
@@ -46,7 +47,7 @@ export function hiden_linhas_corrente_pos_for(response, i, Vetor_corrente, escon
 
 export function options_corrente(esconde_linha1_corrente) {
     
-    if (esconde_linha1_corrente != 100) {
+    if (esconde_linha1_corrente == 100) {
 
         var options1_corrente = Options_de_graficos_corrente.optios5()
 
