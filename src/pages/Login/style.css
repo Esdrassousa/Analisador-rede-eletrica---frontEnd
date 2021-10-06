@@ -1,0 +1,25 @@
+.pai{
+    width: 100%;
+    display: grid;
+}
+.inputs{
+    display: flex;
+}
+.inputs a{
+    font-size: 3vh;
+    margin: 2px;
+
+}
+
+.inputs input{
+    width: 10%;
+    height: 70%;
+
+}
+
+.bt_login{
+    width: 10vh;
+    height:5vh;
+    margin: 2px;
+    margin-top: .1px;
+}
