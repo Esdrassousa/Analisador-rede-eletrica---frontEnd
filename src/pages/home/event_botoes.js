@@ -29,41 +29,6 @@ function event_botoes() {
 
         })
 
-        var butao_hinde_L2_corrente = document.getElementById('button_L_L2_corrente')
-        butao_hinde_L2_corrente.addEventListener("click", function () {
-
-
-
-          if (butao_hinde_L2_corrente.className == 'cinza') {
-            butao_hinde_L2_corrente.classList.replace('cinza', 'red');
-            console.log('entrou aqui')
-          }
-
-          else {
-            //butao_hinde_L1.classList.toggle('red')
-            butao_hinde_L2_corrente.classList.replace('red', 'cinza');
-
-          }
-
-        })
-
-        var butao_hinde_L3_corrente = document.getElementById('button_L_L3_corrente')
-        butao_hinde_L3_corrente.addEventListener("click", function () {
-
-
-
-          if (butao_hinde_L3_corrente.className == 'ambar') {
-            butao_hinde_L3_corrente.classList.replace('ambar', 'red');
-            console.log('entrou aqui')
-          }
-
-          else {
-            //butao_hinde_L1.classList.toggle('red')
-            butao_hinde_L3_corrente.classList.replace('red', 'ambar');
-
-          }
-
-        })
 
         ///////////////////////////////// TENSAO /////////////////////////
 
@@ -85,41 +50,25 @@ function event_botoes() {
 
         })
 
-        var butao_hinde_L2_tensao = document.getElementById('button_L_L2_tensao')
-        butao_hinde_L2_tensao.addEventListener("click", function () {
+        var butao_hinde_L1_potAparente = document.getElementById('button_L_L1_potAparente')
+        butao_hinde_L1_potAparente.addEventListener("click", function () {
 
 
 
-          if (butao_hinde_L2_tensao.className == 'cinza') {
-            butao_hinde_L2_tensao.classList.replace('cinza', 'red');
+          if (butao_hinde_L1_potAparente.className == 'blue1') {
+            butao_hinde_L1_potAparente.classList.replace('blue1', 'red');
             console.log('entrou aqui')
           }
 
           else {
             //butao_hinde_L1.classList.toggle('red')
-            butao_hinde_L2_tensao.classList.replace('red', 'cinza');
+            butao_hinde_L1_potAparente.classList.replace('red', 'blue1');
 
           }
 
         })
 
-        var butao_hinde_L3_tensao = document.getElementById('button_L_L3_tensao')
-        butao_hinde_L3_tensao.addEventListener("click", function () {
-
-
-
-          if (butao_hinde_L3_tensao.className == 'ambar') {
-            butao_hinde_L3_tensao.classList.replace('ambar', 'red');
-            console.log('entrou aqui')
-          }
-
-          else {
-            //butao_hinde_L1.classList.toggle('red')
-            butao_hinde_L3_tensao.classList.replace('red', 'ambar');
-
-          }
-
-        })
+        
 
         buttonb.addEventListener("click", function () {
           var container = document.getElementById("mostra1")

@@ -10,6 +10,7 @@ import logoFortesol from '../../imagens/logo.png';
 import event_botoes from './event_botoes'
 import { hiden_linhas_tensao, hiden_linhas_tensao_pos_for, options_tensao,Hiden_linha1_tensao } from './Tensao/hiden_linhas_tensao'
 import { hiden_linhas_corrente, hiden_linhas_corrente_pos_for, options_corrente,Hiden_linha1_corrente} from './Corrente/hidden_linhas_corrente'
+import {hiden_linhas_potAparente, hiden_linhas_potAparente_pos_for, options_potAparente,Hiden_linha1_potAparente} from './potAparente/hidden_linhas_potAparente'
 import {fator_potencia , fator_potencia_total} from './Fator_Pot/fator_pot'
 
 global.tempo_aux_para_enviar_backend = 0;
@@ -17,10 +18,11 @@ global.tempo_para_enviar_backend = 0
 
 
 global.esconde_linha1_tensao = 100
-global.esconde_linha2_tensao = 100
-global.esconde_linha3_tensao = 100
+
 
 global.esconde_linha1_corrente = 100
+
+global.esconde_linha1_potAparente = 100
 
 
 
@@ -32,6 +34,8 @@ export default function Home() {
   const [corrente, setCorrente] = useState([['', 'Corrente'],['', 0]]);
 
   const [tensao, setTensao] = useState([['', 'Tensão'], ['', 0]])
+
+  const [potAparente, setpotAparente] = useState([['', 'potAparente'], ['', 0]])
 
   const [fpot1, setFpot1] = useState([['Label', 'Value'],['FPA', 0],['FPB', 0],['FPC', 0]])
 
@@ -56,37 +60,44 @@ export default function Home() {
       var tamanho = (response.data[0])
       var tamanho = tamanho[0].length
 
-      var Vetor_tensao = hiden_linhas_tensao(global.esconde_linha1_tensao, global.esconde_linha2_tensao, global.esconde_linha3_tensao)
+      var Vetor_tensao = hiden_linhas_tensao(global.esconde_linha1_tensao)
       var Vetor_corrente = hiden_linhas_corrente(global.esconde_linha1_corrente)
+      var Vetor_potAparente = hiden_linhas_potAparente(global.esconde_linha1_potAparente)
       var Vetor_FatorPotTotal = [['', 'Fator_POt'],['', 0]]
       for (var i = 0; i < tamanho; i++) {
 
         var Vetor_Corrente = hiden_linhas_corrente_pos_for(response.data, i, Vetor_corrente, global.esconde_linha1_corrente)
-        var Vetor_tensao = hiden_linhas_tensao_pos_for(response.data, i, Vetor_tensao, global.esconde_linha1_tensao, global.esconde_linha2_tensao, global.esconde_linha3_tensao)
+        var Vetor_tensao = hiden_linhas_tensao_pos_for(response.data, i, Vetor_tensao, global.esconde_linha1_tensao)
+        var Vetor_potAparente = hiden_linhas_potAparente_pos_for(response.data, i, Vetor_potAparente, global.esconde_linha1_potAparente)
         var Vetor_FatorPotTotal = fator_potencia_total(response.data,Vetor_FatorPotTotal,i)
       }
       var fator_pot1
-      var fator_pot2
-      var fator_pot3
-      [fator_pot1,fator_pot2,fator_pot3] = fator_potencia(response.data)
-      setFpot1([['Label', 'Value'],['FPA', fator_pot1],['FPB', fator_pot2],['FPC', fator_pot3]])
+
+      [fator_pot1] = fator_potencia(response.data)
+      setFpot1([['Label', 'Value'],['FPA', fator_pot1]])
       setFpotTotal(Vetor_FatorPotTotal)
       setCorrente(Vetor_Corrente)
       setTensao(Vetor_tensao)
+      setpotAparente(Vetor_potAparente)
 
 
     })
 
 
   }
-  async function fun_Hiden_linha1_corrente(indice){
+  
+async function fun_Hiden_linha1_corrente(indice){
   [global.esconde_linha1_corrente] = Hiden_linha1_corrente(indice,global.esconde_linha1_corrente)
 }
 
 async function fun_Hiden_linha1_tensao(indice){
-  [global.esconde_linha1_tensao,global.esconde_linha2_tensao,global.esconde_linha3_tensao] = Hiden_linha1_tensao(indice,global.esconde_linha1_tensao, global.esconde_linha2_tensao, global.esconde_linha3_tensao)
+  [global.esconde_linha1_tensao] = Hiden_linha1_tensao(indice,global.esconde_linha1_tensao)
 }
-  
+
+async function fun_Hiden_linha1_potAparente(indice){
+  [global.esconde_linha1_potAparente] = Hiden_linha1_potAparente(indice,global.esconde_linha1_potAparente)
+}
+
 
 
   async function clickBotao_de_tempo(id, text) {
@@ -122,26 +133,29 @@ async function fun_Hiden_linha1_tensao(indice){
 
 
 
-      var Vetor_tensao = hiden_linhas_tensao(global.esconde_linha1_tensao, global.esconde_linha2_tensao, global.esconde_linha3_tensao)
-      var Vetor_corrente = hiden_linhas_corrente(global.esconde_linha1_corrente, global.esconde_linha2_corrente, global.esconde_linha3_corrente)
+      var Vetor_tensao = hiden_linhas_tensao(global.esconde_linha1_tensao)
+      var Vetor_corrente = hiden_linhas_corrente(global.esconde_linha1_corrente)
+      var Vetor_potAparente = hiden_linhas_potAparente(global.esconde_linha1_potAparente)
       var Vetor_FatorPotTotal = [['', 'Fator_POt'],['', 0]]
       for (var i = 0; i < tamanho; i++) {
 
-        var Vetor_Corrente = hiden_linhas_corrente_pos_for(response.data, i, Vetor_corrente, global.esconde_linha1_corrente, global.esconde_linha2_corrente, global.esconde_linha3_corrente)
+        var Vetor_Corrente = hiden_linhas_corrente_pos_for(response.data, i, Vetor_corrente, global.esconde_linha1_corrente)
 
-        var Vetor_tensao = hiden_linhas_tensao_pos_for(response.data, i, Vetor_tensao, global.esconde_linha1_tensao, global.esconde_linha2_tensao, global.esconde_linha3_tensao)
+        var Vetor_tensao = hiden_linhas_tensao_pos_for(response.data, i, Vetor_tensao, global.esconde_linha1_tensao)
+
+        var Vetor_potAparente = hiden_linhas_potAparente_pos_for(response.data, i, Vetor_potAparente, global.esconde_linha1_potAparente)
 
         var Vetor_FatorPotTotal = fator_potencia_total(response.data,Vetor_FatorPotTotal,i)
 
       }
       var fator_pot1
-      var fator_pot2
-      var fator_pot3
-      [fator_pot1,fator_pot2,fator_pot3] = fator_potencia(response.data)
-      setFpot1([['Label', 'Value'],['FPA', fator_pot1],['FPB', fator_pot2],['FPC', fator_pot3]])
+    
+      [fator_pot1] = fator_potencia(response.data)
+      setFpot1([['Label', 'Value'],['FPA', fator_pot1]])
       setFpotTotal(Vetor_FatorPotTotal)
       setCorrente(Vetor_Corrente)
       setTensao(Vetor_tensao)
+      setpotAparente(Vetor_potAparente)
 
 
 
@@ -155,9 +169,11 @@ async function fun_Hiden_linha1_tensao(indice){
 
 
 
-  var options1_corrente = options_corrente(global.esconde_linha1_corrente, global.esconde_linha2_corrente, global.esconde_linha3_corrente)
+  var options1_corrente = options_corrente(global.esconde_linha1_corrente)
 
-  var options1_tensao = options_tensao(global.esconde_linha1_tensao, global.esconde_linha2_tensao, global.esconde_linha3_tensao)
+  var options1_tensao = options_tensao(global.esconde_linha1_tensao)
+
+  var options1_potAparente = options_potAparente(global.esconde_linha1_potAparente)
   ////////////////////////////////////////////////
 
   
@@ -217,9 +233,7 @@ async function fun_Hiden_linha1_tensao(indice){
           </Chart>
 
           <button id='button_L_L1_corrente' class='blue1' onClick={(e) => fun_Hiden_linha1_corrente(1)}>Corrente_A</button>
-          <button id='button_L_L2_corrente' class='cinza' onClick={(e) => fun_Hiden_linha1_corrente(2)} >Corrente_B</button>
-          <button id='button_L_L3_corrente' class='ambar' onClick={(e) => fun_Hiden_linha1_corrente(3)} >Corrente_C</button>
-
+          
           <Chart
 
             width={'99vw'}
@@ -238,8 +252,29 @@ async function fun_Hiden_linha1_tensao(indice){
           </Chart>
           
           <button id='button_L_L1_tensao' class='blue1' onClick={(e) => fun_Hiden_linha1_tensao(1)}>Tensão_A</button>
-          <button id='button_L_L2_tensao' class='cinza' onClick={(e) => fun_Hiden_linha1_tensao(2)} >Tensão_B</button>
-          <button id='button_L_L3_tensao' class='ambar' onClick={(e) => fun_Hiden_linha1_tensao(3)} >Tensão_C</button>
+         
+          <Chart onCha
+
+            width={'99vw'}
+            height={'50vh'}
+            /* width={'100%'}
+            height={'100%'} */
+            options={options1_potAparente}
+            chartType="AreaChart"
+            loader={<div>Loading Chart</div>}
+            //chartType="LineChart"
+            data={potAparente}
+            ScrollBar
+            rootProps={{ 'data-testid': '10' }}
+
+          >
+          </Chart>
+
+          <button id='button_L_L1_potAparente' class='blue1' onClick={(e) => fun_Hiden_linha1_potAparente(1)}>potAparente_A</button>
+          
+
+
+
           <div class='gauge'>
           
           
