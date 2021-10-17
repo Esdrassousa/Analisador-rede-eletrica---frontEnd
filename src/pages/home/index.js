@@ -41,6 +41,9 @@ export default function Home() {
 
   const [fpotTotal , setFpotTotal] = useState([['', 'Fator de Potencia Geral'], ['', 0]])
 
+
+ 
+
   async function atualiza_grafico(e) {
 
     e.preventDefault()
@@ -86,7 +89,9 @@ export default function Home() {
 
   }
   
-async function fun_Hiden_linha1_corrente(indice){
+
+
+  async function fun_Hiden_linha1_corrente(indice){
   [global.esconde_linha1_corrente] = Hiden_linha1_corrente(indice,global.esconde_linha1_corrente)
 }
 
@@ -99,7 +104,17 @@ async function fun_Hiden_linha1_potAparente(indice){
 }
 
 
+async function mqtt_Liga(){
+  
+  const response = await api.post('/mqtt/liga', '1')
 
+  console.log(response)
+}
+
+async function mqtt_desliga(){
+  
+  const response = await  api.post('/mqtt/desliga', 0)
+}
   async function clickBotao_de_tempo(id, text) {
 
     global.tempo_aux_para_enviar_backend = id
@@ -208,11 +223,23 @@ async function fun_Hiden_linha1_potAparente(indice){
         </div>
 
       </div>
+      <button class='button' onClick={(e) => mqtt_Liga()}>ON</button>
+      <button class='button' onClick={(e) => mqtt_desliga()}>OFF</button>
 
+      {/* <form onSubmit={mqtt_Liga}>
+      <button>Liga</button>
+      </form>
+      <form onSubmit={mqtt_desliga}>
+      <button>DesLiga</button>
+      </form> */}
+      {/* <button class ="button" onClick={(e)=>mqtt_Liga()}>Liga</button>
+      <button class ="button" onClick={(e)=>mqtt_desliga()}>Desliga</button> */}
       
       <div class='graficos'>
-
-
+      
+      {/* <form onSubmit={mqtt}>
+      <button>on</button>
+      </form> */}
         <form onSubmit={atualiza_grafico}>
 
           <Chart onCha
