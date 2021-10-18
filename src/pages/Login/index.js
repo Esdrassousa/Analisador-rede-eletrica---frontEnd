@@ -24,6 +24,7 @@ export default function Login(){
             <div class='inputs'>
                 <a>Login</a> <input type = "text" id='login'></input>
                 <a>Senha</a> <input id= 'senha'></input>
+                <a>Senha</a> <input id= 'senha'></input>
                 <button class='bt_login' onClick={(e)=>ValidaSenha()}>Entrar</button>
             </div>
 
