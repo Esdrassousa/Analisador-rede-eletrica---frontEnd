@@ -37,7 +37,8 @@ img{
 }
 .bt_atualiza{
     position: relative;
-    width: 10vw;
+    width: 15vw;
+    height: 5vh;
     font-size: 2vh;
     margin-left: 10vw;
     margin-right: 5vw;
