@@ -223,31 +223,21 @@ async function mqtt_desliga(){
         </div>
 
       </div>
-      <button class='button' onClick={(e) => mqtt_Liga()}>ON</button>
-      <button class='button' onClick={(e) => mqtt_desliga()}>OFF</button>
 
-      {/* <form onSubmit={mqtt_Liga}>
-      <button>Liga</button>
-      </form>
-      <form onSubmit={mqtt_desliga}>
-      <button>DesLiga</button>
-      </form> */}
-      {/* <button class ="button" onClick={(e)=>mqtt_Liga()}>Liga</button>
-      <button class ="button" onClick={(e)=>mqtt_desliga()}>Desliga</button> */}
+      <button class='button_mqtt' onClick={(e) => mqtt_Liga()}>ON</button>
+      <button class='button_mqtt' onClick={(e) => mqtt_desliga()}>OFF</button>
+
       
       <div class='graficos'>
       
-      {/* <form onSubmit={mqtt}>
-      <button>on</button>
-      </form> */}
+      
         <form onSubmit={atualiza_grafico}>
 
           <Chart onCha
 
-            width={'99vw'}
-            height={'50vh'}
-            /* width={'100%'}
-            height={'100%'} */
+            //width={'50vw'}
+            //height={'50vh'}
+            font-size={'2vw'}
             options={options1_corrente}
             chartType="AreaChart"
             loader={<div>Loading Chart</div>}

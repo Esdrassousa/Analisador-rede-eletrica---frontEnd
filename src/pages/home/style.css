@@ -1,17 +1,26 @@
+
 body{
+    margin: 0;
     width: 100%;
     height: 100%;
     background-color:rgb(214, 211, 211);
 }
 
-
+.button_mqtt{
+    width: 20vw;
+    margin-right: 1.2em;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    padding: 1vw;
+}
 .pai{
+
     display: inline-block;
-    width: 100%;
+    
 }
 
 .menu{
-    width: 100%;
+    
     display: flex;
     position: relative;
     z-index: 1;
@@ -20,16 +29,18 @@ body{
 
 img{
     display: block;
-    margin-left: 44vw;
-    margin-right: auto;
+    margin-top: 3vh;
+    margin-left: 40vw;
+    margin-right: -2vw;
     position: relative;
     resize: both;
 }
 .bt_atualiza{
     position: relative;
     width: 10vw;
-    font-size: 1.2vw;
-    margin-left: 20vw;
+    font-size: 2vh;
+    margin-left: 10vw;
+    margin-right: 5vw;
     resize: both;
 }
 
@@ -48,7 +59,7 @@ img{
     transition-duration:  1s;
 }
 .div_button{
-    width: 100%;
+    width: 2vw;
     height: 100%;
     margin-top: 0.2em;
     display: block;
@@ -57,17 +68,22 @@ img{
     
 }
 .graficos{
-    border: 0em;
-    width: 100%;
+    border: 2em;
+    width: 80vw;
     height: 100%;
     display: table;
     position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: antiquewhite;
-  
+    margin-left: 0vw;
+    margin-right: 0vw;
+    font-size: 1.2vw;
+    background-color: rgb(202, 143, 65);
+    
     z-index: 3;
    
+}
+
+.graficos onCha{
+    width: 10vw;
 }
 
 .gauge{
@@ -97,8 +113,8 @@ img{
 
 
 img{
-    width: 15em;
-    height: 10em;
+    width: 30vw;
+    height: 20vh;
 }
 
 
