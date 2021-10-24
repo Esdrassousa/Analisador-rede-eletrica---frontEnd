@@ -61,7 +61,7 @@ export default function Home() {
     await api.post('/', global.tempo_para_enviar_backend).then(response => {
 
       var tamanho = (response.data[0])
-      console.log(tamanho)
+      console.log('estrou aqui', tamanho)
       var tamanho = tamanho[0].length
 
       var Vetor_tensao = hiden_linhas_tensao(global.esconde_linha1_tensao)
