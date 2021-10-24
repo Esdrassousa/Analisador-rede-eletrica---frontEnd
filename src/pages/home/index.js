@@ -139,7 +139,7 @@ async function mqtt_desliga(){
     }
     await api.post('/', global.tempo_para_enviar_backend).then(response => {
 
-
+      console.log(response.data[0])
 
       var tamanho = (response.data[0])
       var tamanho = tamanho[0].length
