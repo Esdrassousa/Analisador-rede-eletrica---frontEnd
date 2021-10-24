@@ -58,6 +58,7 @@ export default function Home() {
         minutes_recebidos
       }
     }
+    console.log('estrou aqui minutos', minutes_recebidos)
     await api.post('/', global.tempo_para_enviar_backend).then(response => {
 
       var tamanho = (response.data[0])
