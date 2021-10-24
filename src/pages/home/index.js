@@ -76,7 +76,7 @@ export default function Home() {
         
       }
       var fator_pot1
-      
+
       console.log(Vetor_Corrente)
 
       [fator_pot1] = fator_potencia(response.data)
@@ -111,7 +111,7 @@ async function mqtt_Liga(){
   
   const response = await api.post('/mqtt/liga', '1')
 
-  console.log(response)
+  //console.log(response)
 }
 
 async function mqtt_desliga(){
@@ -177,7 +177,7 @@ async function mqtt_desliga(){
 
 
 
-      console.log(tamanho)
+      //console.log(tamanho)
 
 
 
