@@ -76,7 +76,9 @@ export default function Home() {
         
       }
       var fator_pot1
+      
       console.log(Vetor_Corrente)
+
       [fator_pot1] = fator_potencia(response.data)
       setFpot1([['Label', 'Value'],['FPA', fator_pot1]])
       setFpotTotal(Vetor_FatorPotTotal)
