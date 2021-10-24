@@ -73,6 +73,7 @@ export default function Home() {
         var Vetor_tensao = hiden_linhas_tensao_pos_for(response.data, i, Vetor_tensao, global.esconde_linha1_tensao)
         var Vetor_potAparente = hiden_linhas_potAparente_pos_for(response.data, i, Vetor_potAparente, global.esconde_linha1_potAparente)
         var Vetor_FatorPotTotal = fator_potencia_total(response.data,Vetor_FatorPotTotal,i)
+        console.log(Vetor_Corrente)
       }
       var fator_pot1
 
@@ -139,7 +140,7 @@ async function mqtt_desliga(){
     }
     await api.post('/', global.tempo_para_enviar_backend).then(response => {
 
-      console.log(response.data[0])
+      
 
       var tamanho = (response.data[0])
       var tamanho = tamanho[0].length
