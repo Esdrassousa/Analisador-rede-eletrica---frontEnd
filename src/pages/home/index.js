@@ -73,10 +73,10 @@ export default function Home() {
         var Vetor_tensao = hiden_linhas_tensao_pos_for(response.data, i, Vetor_tensao, global.esconde_linha1_tensao)
         var Vetor_potAparente = hiden_linhas_potAparente_pos_for(response.data, i, Vetor_potAparente, global.esconde_linha1_potAparente)
         var Vetor_FatorPotTotal = fator_potencia_total(response.data,Vetor_FatorPotTotal,i)
-        console.log(Vetor_Corrente)
+        
       }
       var fator_pot1
-
+      console.log(Vetor_Corrente)
       [fator_pot1] = fator_potencia(response.data)
       setFpot1([['Label', 'Value'],['FPA', fator_pot1]])
       setFpotTotal(Vetor_FatorPotTotal)
