@@ -1,11 +1,11 @@
 
 
-export function fator_potencia(response) {
+export function fator_potencia(response,i) {
     var fator_pot1 = response[5]
     var fator_pot1 = fator_pot1[0]
 
     
-    return [fator_pot1]
+    return fator_pot1[i]
 
 }
 

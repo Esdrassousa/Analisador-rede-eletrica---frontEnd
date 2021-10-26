@@ -3,7 +3,6 @@ import './style.css'
 import ReactDOM from 'react-dom'
 import { Chart } from "react-google-charts";
 import { useState } from 'react';
-import classes from "./ScatterPlot.module.css";
 import api from '../../services/api'
 import logoFortesol from '../../imagens/logo.png';
 
@@ -23,9 +22,10 @@ global.esconde_linha1_tensao = 100
 global.esconde_linha1_corrente = 100
 
 global.esconde_linha1_potAparente = 100
+const data  =  new Date()
 
-
-
+var horas_atual = data.getHours()
+        console.log('horas atual: ', horas_atual)
 event_botoes()
 
 export default function Home() {
@@ -37,7 +37,7 @@ export default function Home() {
 
   const [potAparente, setpotAparente] = useState([['', 'potAparente'], ['', 0]])
 
-  const [fpot1, setFpot1] = useState([['Label', 'Value'],['FPA', 0],['FPB', 0],['FPC', 0]])
+  const [fpot1, setFpot1] = useState([['Label', 'Value'],['FPA', 0]])
 
   const [fpotTotal , setFpotTotal] = useState([['', 'Fator de Potencia Geral'], ['', 0]])
 
@@ -81,7 +81,7 @@ export default function Home() {
 
       console.log(Vetor_Corrente)
 
-      [fator_pot1] = fator_potencia(response.data)
+      fator_pot1 = fator_potencia(response.data,(tamanho-1))
       setFpot1([['Label', 'Value'],['FPA', fator_pot1]])
       setFpotTotal(Vetor_FatorPotTotal)
       setCorrente(Vetor_Corrente)
@@ -170,7 +170,8 @@ async function mqtt_desliga(){
       }
       var fator_pot1
     
-      [fator_pot1] = fator_potencia(response.data)
+      fator_pot1 = fator_potencia(response.data,(tamanho-1))
+      console.log('fator de potencia: ', fator_pot1)
       setFpot1([['Label', 'Value'],['FPA', fator_pot1]])
       setFpotTotal(Vetor_FatorPotTotal)
       setCorrente(Vetor_Corrente)
@@ -240,8 +241,8 @@ async function mqtt_desliga(){
 
           <Chart onCha
 
-            //width={'50vw'}
-            //height={'50vh'}
+            width={'99vw'}
+            height={'50vh'}
             font-size={'2vw'}
             options={options1_corrente}
             chartType="AreaChart"
