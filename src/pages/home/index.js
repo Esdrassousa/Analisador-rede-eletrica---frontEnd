@@ -79,7 +79,7 @@ export default function Home() {
       }
       var fator_pot1
 
-      console.log(Vetor_Corrente)
+      console.log(fator_pot1)
 
       fator_pot1 = fator_potencia(response.data,(tamanho-1))
       setFpot1([['Label', 'Value'],['FPA', fator_pot1]])
