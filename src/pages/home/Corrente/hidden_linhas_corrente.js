@@ -79,3 +79,18 @@ export function Hiden_linha1_corrente(indice,esconde_linha1_corrente) {
       return [esconde_linha1_corrente]
 }
 
+
+export function ultimo_valor_corrente(response, i) {
+
+    
+
+
+    var corrente_ultimo = response[1]
+    var corrente_ultimo = corrente_ultimo[0]
+
+
+    return corrente_ultimo[i]
+
+    
+}
+

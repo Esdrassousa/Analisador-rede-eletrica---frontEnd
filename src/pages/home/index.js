@@ -7,14 +7,29 @@ import api from '../../services/api'
 import logoFortesol from '../../imagens/logo.png';
 
 import event_botoes from './event_botoes'
-import { hiden_linhas_tensao, hiden_linhas_tensao_pos_for, options_tensao,Hiden_linha1_tensao } from './Tensao/hiden_linhas_tensao'
-import { hiden_linhas_corrente, hiden_linhas_corrente_pos_for, options_corrente,Hiden_linha1_corrente} from './Corrente/hidden_linhas_corrente'
-import {hiden_linhas_potAparente, hiden_linhas_potAparente_pos_for, options_potAparente,Hiden_linha1_potAparente} from './potAparente/hidden_linhas_potAparente'
-import {fator_potencia , fator_potencia_total} from './Fator_Pot/fator_pot'
+import {
+  hiden_linhas_tensao, hiden_linhas_tensao_pos_for,
+  options_tensao, Hiden_linha1_tensao
+} from './Tensao/hiden_linhas_tensao'
+
+import {
+  hiden_linhas_corrente, hiden_linhas_corrente_pos_for,
+  options_corrente, Hiden_linha1_corrente,
+  ultimo_valor_corrente
+} from './Corrente/hidden_linhas_corrente'
+
+import {
+  hiden_linhas_potAparente, hiden_linhas_potAparente_pos_for,
+  options_potAparente, Hiden_linha1_potAparente
+} from './potAparente/hidden_linhas_potAparente'
+import { fator_potencia, fator_potencia_total } from './Fator_Pot/fator_pot'
+
+import { Global } from 'recharts';
 
 global.tempo_aux_para_enviar_backend = 0;
 global.tempo_para_enviar_backend = 0
 
+global.ultimovalor_corrente = 0
 
 global.esconde_linha1_tensao = 100
 
@@ -22,27 +37,27 @@ global.esconde_linha1_tensao = 100
 global.esconde_linha1_corrente = 100
 
 global.esconde_linha1_potAparente = 100
-const data  =  new Date()
+const data = new Date()
 
 var horas_atual = data.getHours()
-        console.log('horas atual: ', horas_atual)
+console.log('horas atual: ', horas_atual)
 event_botoes()
 
 export default function Home() {
 
 
-  const [corrente, setCorrente] = useState([['', 'Corrente'],['', 0]]);
+  const [corrente, setCorrente] = useState([['', 'Corrente'], ['', 0]]);
 
   const [tensao, setTensao] = useState([['', 'Tensão'], ['', 0]])
 
   const [potAparente, setpotAparente] = useState([['', 'potAparente'], ['', 0]])
 
-  const [fpot1, setFpot1] = useState([['Label', 'Value'],['FPA', 0]])
+  const [fpot1, setFpot1] = useState([['Label', 'Value'], ['FPA', 0]])
 
-  const [fpotTotal , setFpotTotal] = useState([['', 'Fator de Potencia Geral'], ['', 0]])
+  const [fpotTotal, setFpotTotal] = useState([['', 'Fator de Potencia Geral'], ['', 0]])
 
 
- 
+
 
   async function atualiza_grafico(e) {
 
@@ -54,11 +69,11 @@ export default function Home() {
       }
     } else {
       var minutes_recebidos = global.tempo_aux_para_enviar_backend
-        global.tempo_para_enviar_backend = {
+      global.tempo_para_enviar_backend = {
         minutes_recebidos
       }
     }
-    console.log('estrou aqui minutos', minutes_recebidos)
+    //console.log('estrou aqui minutos', minutes_recebidos)
     await api.post('/', global.tempo_para_enviar_backend).then(response => {
 
       var tamanho = (response.data[0])
@@ -68,21 +83,22 @@ export default function Home() {
       var Vetor_tensao = hiden_linhas_tensao(global.esconde_linha1_tensao)
       var Vetor_corrente = hiden_linhas_corrente(global.esconde_linha1_corrente)
       var Vetor_potAparente = hiden_linhas_potAparente(global.esconde_linha1_potAparente)
-      var Vetor_FatorPotTotal = [['', 'Fator_POt'],['', 0]]
+      var Vetor_FatorPotTotal = [['', 'Fator_POt'], ['', 0]]
       for (var i = 0; i < tamanho; i++) {
 
         var Vetor_Corrente = hiden_linhas_corrente_pos_for(response.data, i, Vetor_corrente, global.esconde_linha1_corrente)
         var Vetor_tensao = hiden_linhas_tensao_pos_for(response.data, i, Vetor_tensao, global.esconde_linha1_tensao)
         var Vetor_potAparente = hiden_linhas_potAparente_pos_for(response.data, i, Vetor_potAparente, global.esconde_linha1_potAparente)
-        var Vetor_FatorPotTotal = fator_potencia_total(response.data,Vetor_FatorPotTotal,i)
-        
+        var Vetor_FatorPotTotal = fator_potencia_total(response.data, Vetor_FatorPotTotal, i)
+
       }
       var fator_pot1
 
-      console.log(fator_pot1)
+      fator_pot1 = fator_potencia(response.data, (tamanho - 1))
 
-      fator_pot1 = fator_potencia(response.data,(tamanho-1))
-      setFpot1([['Label', 'Value'],['FPA', fator_pot1]])
+      global.ultimovalor_corrente = ultimo_valor_corrente(response.data, (tamanho - 1))
+      console.log('ultimo valor corrente: ', global.ultimovalor_corrente)
+      setFpot1([['Label', 'Value'], ['FPA', fator_pot1]])
       setFpotTotal(Vetor_FatorPotTotal)
       setCorrente(Vetor_Corrente)
       setTensao(Vetor_tensao)
@@ -93,33 +109,118 @@ export default function Home() {
 
 
   }
+
+
+
+  async function fun_Hiden_linha1_corrente(indice) {
+    [global.esconde_linha1_corrente] = Hiden_linha1_corrente(indice, global.esconde_linha1_corrente)
+  }
+
+  async function fun_Hiden_linha1_tensao(indice) {
+    [global.esconde_linha1_tensao] = Hiden_linha1_tensao(indice, global.esconde_linha1_tensao)
+  }
+
+  async function fun_Hiden_linha1_potAparente(indice) {
+    [global.esconde_linha1_potAparente] = Hiden_linha1_potAparente(indice, global.esconde_linha1_potAparente)
+  }
+
+
+  ////// muda estado botao carga
+  const btn_desliga = document.getElementById('button_mqqt_desliga')
+  const btn_liga = document.getElementById('button_mqqt_liga')
+
+  if (btn_desliga) {
+    btn_desliga.addEventListener("click",  () => {
+      
+      if (btn_desliga.innerText === "Aguarde..." || btn_liga.innerText === "Aguarde...") {
   
+        alert("agurde, ou Reinicie a pagina")
+
+      }else{const response =   api.post('/mqtt/desliga', '0')}
+
+      if (btn_desliga.innerText === "OFF") {
+        btn_desliga.innerText = "Aguarde...";
+      }
+    })
+
+  }
+
+  if (btn_liga) {
+    btn_liga.addEventListener("click", () => {
+      setTimeout(function(){
 
 
-  async function fun_Hiden_linha1_corrente(indice){
-  [global.esconde_linha1_corrente] = Hiden_linha1_corrente(indice,global.esconde_linha1_corrente)
-}
-
-async function fun_Hiden_linha1_tensao(indice){
-  [global.esconde_linha1_tensao] = Hiden_linha1_tensao(indice,global.esconde_linha1_tensao)
-}
-
-async function fun_Hiden_linha1_potAparente(indice){
-  [global.esconde_linha1_potAparente] = Hiden_linha1_potAparente(indice,global.esconde_linha1_potAparente)
-}
-
-
-async function mqtt_Liga(){
+      }, 2000);
+      
+        if (btn_desliga.innerText == "Aguarde..." || btn_liga.innerText == "Aguarde...") {
   
-  const response = await api.post('/mqtt/liga', '1')
-
-  //console.log(response)
-}
-
-async function mqtt_desliga(){
+          alert("Agurde, ou Reinicie a pagina")
   
-  const response = await  api.post('/mqtt/desliga', 0)
-}
+        }else{const response =  api.post('/mqtt/liga', '1')}
+
+        
+
+      if (btn_liga.innerText === "ON") {
+        btn_liga.innerText = "Aguarde...";
+      }
+    })
+
+  }
+
+  if (global.ultimovalor_corrente < 0.06) {
+
+    if (btn_desliga) {
+      
+      if (btn_desliga.innerText === "OFF" || btn_desliga.innerText === "Aguarde...") {
+
+        btn_desliga.innerText = "Desligado";
+        btn_liga.innerText = "ON";
+
+
+      }
+    }
+  }
+
+  if (global.ultimovalor_corrente > 0.06) {
+
+    if (btn_liga) {
+      if (btn_liga.innerText === "ON" || btn_liga.innerText === "Aguarde...") {
+
+        btn_liga.innerText = "Ligado";
+        btn_desliga.innerText = "OFF";
+      }
+    }
+  }
+
+
+  async function mqtt_Liga() {
+
+    if (btn_liga) {
+      if (btn_desliga.innerText === "Aguarde..." || btn_liga.innerText === "Aguarde...") {
+
+        alert("agurde, ou Reinicie a pagina")
+
+      }
+    }else{const response = await api.post('/mqtt/liga', '1')}
+
+    
+
+
+  }
+  async function mqtt_desliga() {
+
+    if (btn_desliga) {
+      if (btn_desliga.innerText === "Aguarde..." || btn_liga.innerText === "Aguarde...") {
+
+        alert("agurde, ouinicie a pagina")
+
+      }
+    }else{const response = await api.post('/mqtt/desliga', 0)}
+
+    
+  }
+
+
   async function clickBotao_de_tempo(id, text) {
 
     global.tempo_aux_para_enviar_backend = id
@@ -144,7 +245,7 @@ async function mqtt_desliga(){
     }
     await api.post('/', global.tempo_para_enviar_backend).then(response => {
 
-      
+
 
       var tamanho = (response.data[0])
       var tamanho = tamanho[0].length
@@ -156,7 +257,7 @@ async function mqtt_desliga(){
       var Vetor_tensao = hiden_linhas_tensao(global.esconde_linha1_tensao)
       var Vetor_corrente = hiden_linhas_corrente(global.esconde_linha1_corrente)
       var Vetor_potAparente = hiden_linhas_potAparente(global.esconde_linha1_potAparente)
-      var Vetor_FatorPotTotal = [['', 'Fator_POt'],['', 0]]
+      var Vetor_FatorPotTotal = [['', 'Fator_POt'], ['', 0]]
       for (var i = 0; i < tamanho; i++) {
 
         var Vetor_Corrente = hiden_linhas_corrente_pos_for(response.data, i, Vetor_corrente, global.esconde_linha1_corrente)
@@ -165,14 +266,17 @@ async function mqtt_desliga(){
 
         var Vetor_potAparente = hiden_linhas_potAparente_pos_for(response.data, i, Vetor_potAparente, global.esconde_linha1_potAparente)
 
-        var Vetor_FatorPotTotal = fator_potencia_total(response.data,Vetor_FatorPotTotal,i)
+        var Vetor_FatorPotTotal = fator_potencia_total(response.data, Vetor_FatorPotTotal, i)
 
       }
       var fator_pot1
-    
-      fator_pot1 = fator_potencia(response.data,(tamanho-1))
-      console.log('fator de potencia: ', fator_pot1)
-      setFpot1([['Label', 'Value'],['FPA', fator_pot1]])
+
+      fator_pot1 = fator_potencia(response.data, (tamanho - 1))
+
+      global.ultimovalor_corrente = ultimo_valor_corrente(response.data, (tamanho - 1))
+      console.log('ultimo valor corrente: ', global.ultimovalor_corrente)
+
+      setFpot1([['Label', 'Value'], ['FPA', fator_pot1]])
       setFpotTotal(Vetor_FatorPotTotal)
       setCorrente(Vetor_Corrente)
       setTensao(Vetor_tensao)
@@ -197,17 +301,20 @@ async function mqtt_desliga(){
   var options1_potAparente = options_potAparente(global.esconde_linha1_potAparente)
   ////////////////////////////////////////////////
 
-  
 
 
 
-   
 
-    
+
+
+
   /////////////////////////////////////////////////
 
   return (
     <div class='pai'>
+
+
+
 
       <div class='menu'>
 
@@ -230,13 +337,13 @@ async function mqtt_desliga(){
 
       </div>
 
-      <button class='button_mqtt' onClick={(e) => mqtt_Liga()}>ON</button>
-      <button class='button_mqtt' onClick={(e) => mqtt_desliga()}>OFF</button>
+      <button id='button_mqqt_liga' class='button_mqtt'>ON</button>
+      <button type="button" id="button_mqqt_desliga" class='button_mqtt'>OFF</button>
 
-      
+
       <div class='graficos'>
-      
-      
+
+
         <form onSubmit={atualiza_grafico}>
 
           <Chart onCha
@@ -256,7 +363,7 @@ async function mqtt_desliga(){
           </Chart>
 
           <button id='button_L_L1_corrente' class='blue1' onClick={(e) => fun_Hiden_linha1_corrente(1)}>Corrente_A</button>
-          
+
           <Chart
 
             width={'99vw'}
@@ -273,9 +380,9 @@ async function mqtt_desliga(){
 
           >
           </Chart>
-          
+
           <button id='button_L_L1_tensao' class='blue1' onClick={(e) => fun_Hiden_linha1_tensao(1)}>Tensão_A</button>
-         
+
           <Chart onCha
 
             width={'99vw'}
@@ -294,67 +401,68 @@ async function mqtt_desliga(){
           </Chart>
 
           <button id='button_L_L1_potAparente' class='blue1' onClick={(e) => fun_Hiden_linha1_potAparente(1)}>potAparente_A</button>
-          
+
 
 
 
           <div class='gauge'>
-          
-          
-          <Chart
 
-          width={'99vw'}
-          height={'50vh'}
-          chartType="Gauge"
-          loader={<div>Loading Chart</div>}
-          options={
-              
-            {
-            title: 'Fator de Potência Total',
-            hAxis: {title: 'data',
-             },
-             vAxis: {title: 'Corrente'},
-             backgroundColor: 'transparent',
-          }}
-          chartType="AreaChart"
-          loader={<div>Loading Chart</div>}
-          //chartType="LineChart"
-          data={fpotTotal}
-          ScrollBar
-          rootProps={{ 'data-testid': '10' }}
 
-          >
-          </Chart>
-          
-          <h>Fator de Potencia</h>
-          
-          
-          <Chart
-            width={'40vw'}
-            height={'36vh'}
-            chartType="Gauge"
-            loader={<div>Loading Chart</div>}
-            
-            options={
-              
-              {
-              title: 'Gráficos de Tensão',
-              greenFrom: 0.92,
-              greenTo: 1,
-              redFrom: 0,
-              redTo: 0.5,
-              yellowFrom: 0.5,
-              yellowTo: 0.92,
-              minorTicks: 0.1,
-              min: 0,
-              max: 1 
-            }}
-            rootProps={{ 'data-testid': '1' }}
-            data={fpot1}
+            <Chart
 
-          ></Chart>
+              width={'99vw'}
+              height={'50vh'}
+              chartType="Gauge"
+              loader={<div>Loading Chart</div>}
+              options={
+
+                {
+                  title: 'Fator de Potência Total',
+                  hAxis: {
+                    title: 'data',
+                  },
+                  vAxis: { title: 'Corrente' },
+                  backgroundColor: 'transparent',
+                }}
+              chartType="AreaChart"
+              loader={<div>Loading Chart</div>}
+              //chartType="LineChart"
+              data={fpotTotal}
+              ScrollBar
+              rootProps={{ 'data-testid': '10' }}
+
+            >
+            </Chart>
+
+            <h>Fator de Potencia</h>
+
+
+            <Chart
+              width={'40vw'}
+              height={'36vh'}
+              chartType="Gauge"
+              loader={<div>Loading Chart</div>}
+
+              options={
+
+                {
+                  title: 'Gráficos de Tensão',
+                  greenFrom: 0.92,
+                  greenTo: 1,
+                  redFrom: 0,
+                  redTo: 0.5,
+                  yellowFrom: 0.5,
+                  yellowTo: 0.92,
+                  minorTicks: 0.1,
+                  min: 0,
+                  max: 1
+                }}
+              rootProps={{ 'data-testid': '1' }}
+              data={fpot1}
+
+            ></Chart>
           </div>
-      
+
         </form>
 
 

@@ -7,6 +7,8 @@ function event_botoes() {
 
     window.addEventListener("load", function (event) {
 
+
+   
       var buttonb = document.getElementById("esconde")
 
       if (buttonb) {
